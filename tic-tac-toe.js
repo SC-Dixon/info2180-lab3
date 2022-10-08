@@ -32,8 +32,19 @@ window.onload = function(){
             sqDivs[e].classList.add("O");
             currPlayer = playerX;
         }
-
     }
+
+    [...sqDivs].forEach(function(elem, index, list) {
+        elem.addEventListener('mouseover', function(e) {
+          e.target.classList.add('hover');
+        });
+        
+        elem.addEventListener('mouseout', function(e) {
+          e.target.classList.remove('hover');
+        });
+      });
+
+    
 
 
     
