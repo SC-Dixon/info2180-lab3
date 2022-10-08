@@ -6,6 +6,10 @@ window.onload = function(){
 
     let sqDivs = board.getElementsByTagName("div");
 
+    let statusMes = document.getElementById("status");
+
+    const ngButton = document.querySelector("button");
+
     [...sqDivs].forEach(function(elem, index) 
     {
         elem.classList.add("square");
@@ -14,7 +18,7 @@ window.onload = function(){
         });
     });
 
-    let boardLayout = [0,0,0,0,0,0,0,0,0];
+    let boardLayout = [0,1,2,3,4,5,6,7,8];
 
     let playerX = 'X';
     let playerO = 'O';
@@ -26,10 +30,12 @@ window.onload = function(){
         if (currPlayer == 'X'){
             sqDivs[e].textContent = playerX;
             sqDivs[e].classList.add("X");
+            checkStatus(boardLayout, currPlayer);
             currPlayer = playerO;
         }else{
             sqDivs[e].textContent = playerO;
             sqDivs[e].classList.add("O");
+            checkStatus(boardLayout, currPlayer);
             currPlayer = playerX;
         }
     }
@@ -44,7 +50,45 @@ window.onload = function(){
         });
       });
 
-    
+    const positionsWin = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+    ]
+
+    function checkStatus(boardLayout, currPlayer){
+        console.log(boardLayout);
+        for (const pos of positionsWin){
+            let [a,b,c] = pos;
+
+            if((boardLayout[a] == boardLayout[b]) && (boardLayout[a] == boardLayout[c])){
+                statusMes.innerHTML = `Congratulations! ${currPlayer} is the Winner`;
+                statusMes.classList.add("you-won");
+            }
+        }
+    };
+
+    ngButton.addEventListener("click", function(e) {
+        e.preventDefault();
+        boardLayout = [0,1,2,3,4,5,6,7,8];
+
+
+        [...sqDivs].forEach(function(elem, index) {
+            elem.innerText = ''; 
+        });
+
+        currPlayer = 'X';
+
+        statusMes.classList.remove("you-won");
+        statusMes.innerHTML = "Move your mouse over a square and click to play an X or an O.";
+
+    });
+
 
 
     
