@@ -9,20 +9,38 @@ window.onload = function(){
     let statusMes = document.getElementById("status");
 
     const ngButton = document.querySelector("button");
-
-    [...sqDivs].forEach(function(elem, index) 
-    {
-        elem.classList.add("square");
-        elem.addEventListener("click", () => {
-            squareClicked(index);
-        });
-    });
-
     let boardLayout = [0,1,2,3,4,5,6,7,8];
 
     let playerX = 'X';
     let playerO = 'O';
     let currPlayer = 'X';
+
+    const positionsWin = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+    ];
+
+    [...sqDivs].forEach(function(elem){
+        elem.classList.add("square");
+    });
+        
+
+    function addingListner(){
+        [...sqDivs].forEach(function(elem, index) 
+        {  
+            elem.addEventListener("click", () => {
+                squareClicked(index);
+            },{once:true});
+        });};
+
+    addingListner();
+
     
 
     function squareClicked(e){
@@ -40,26 +58,21 @@ window.onload = function(){
         }
     }
 
-    [...sqDivs].forEach(function(elem, index, list) {
-        elem.addEventListener('mouseover', function(e) {
-          e.target.classList.add('hover');
-        });
-        
-        elem.addEventListener('mouseout', function(e) {
-          e.target.classList.remove('hover');
-        });
-      });
+    
+    function letHover(){
+        [...sqDivs].forEach(function(elem) {
+            elem.addEventListener('mouseover', function(e) {
+            e.target.classList.add('hover');
+            });
+            
+            elem.addEventListener('mouseout', function(e) {
+            e.target.classList.remove('hover');
+            });
+        });};
 
-    const positionsWin = [
-        [0,1,2],
-        [3,4,5],
-        [6,7,8],
-        [0,3,6],
-        [1,4,7],
-        [2,5,8],
-        [0,4,8],
-        [2,4,6]
-    ]
+    letHover();
+
+    
 
     function checkStatus(boardLayout, currPlayer){
         console.log(boardLayout);
@@ -69,6 +82,9 @@ window.onload = function(){
             if((boardLayout[a] == boardLayout[b]) && (boardLayout[a] == boardLayout[c])){
                 statusMes.innerHTML = `Congratulations! ${currPlayer} is the Winner`;
                 statusMes.classList.add("you-won");
+                [...sqDivs].forEach(function(elem) {
+                    elem.style.pointerEvents = "none";
+                });
             }
         }
     };
@@ -79,13 +95,18 @@ window.onload = function(){
 
 
         [...sqDivs].forEach(function(elem, index) {
-            elem.innerText = ''; 
+            elem.removeAttribute("style");
+            elem.innerText = '';
+            elem.setAttribute("class", "square");
+            elem.replaceWith(elem.cloneNode(true));
         });
 
         currPlayer = 'X';
 
         statusMes.classList.remove("you-won");
         statusMes.innerHTML = "Move your mouse over a square and click to play an X or an O.";
+        addingListner();
+        letHover();
 
     });
 
